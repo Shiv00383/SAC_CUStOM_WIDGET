@@ -1,0 +1,74 @@
+{
+    "id":"C_bar_chart",
+    "version":"2.1.2",
+    "name":"Bar_Chart",
+    "description": "Bar Chart",
+    "newInstancePrefix": "Bar",
+    "icon":"http://127.0.0.1:5500/362929.png",
+    "vendor": "Shiv",
+    "eula": "",
+    "license": "",
+    "supportsBookmark": true,
+    "webcomponents":[
+        {
+            "kind":"main",
+            "tag":"bar-chart",
+            "url":"http://127.0.0.1:5501/main.js",
+            "integrity": "",
+            "ignoreIntegrity": true
+        }
+    ],
+    "properties":{
+        "dimensionFeed":{
+            "type":"string[]",
+            "default":[]
+        },
+        "measureFeed":{
+            "type":"string[]",
+            "default":[]
+        },
+        "scaleUnit":{
+            "type":"string",
+            "default":"D"
+        }
+    },
+    "methods":{
+        "setScaleUnit": {
+            "description": "Sets the unit",
+            "parameters": [
+                {
+                    "name": "newScaleUnit",
+                    "type": "string",
+                    "description": "The new unit"
+                }
+            ],
+            "body": "this.scaleUnit = newScaleUnit;"
+        },
+        "getScaleUnit": {
+            "returnType": "string",
+            "description": "Returns the new scale unit.",
+            "body": "return this.scaleUnit;"
+        }
+    },
+    "events":{
+        "onClick":{
+            "description":"Called When User Click"
+        }
+    },
+    "dataBindings":{
+        "myDataBindings":{
+            "feeds":[
+                {
+                    "id":"dimensions",
+                    "description":"Dimension",
+                    "type":"dimension"
+                },
+                {
+                    "id":"measures",
+                    "description":"Measure",
+                    "type":"mainStructureMember"
+                }
+            ]
+        }
+    }
+}
