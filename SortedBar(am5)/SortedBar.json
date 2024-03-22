@@ -1,0 +1,53 @@
+{
+    "id":"S_Chart",
+    "version":"2.1.5",
+    "name":"Bar_Chart_Sorted",
+    "description":"Sorted Chart",
+    "newInstancePrefix":"Bar_C",
+    "icon":"http://127.0.0.1:5500/bar_chart_sorted_icon_183417.png",
+    "vendor":"Shiv",
+    "supportsBookmark":true,
+    "webcomponents":[
+        {
+            "kind":"main",
+            "tag":"s-bar-chart",
+            "url":"http://127.0.0.1:5501/bar.json",
+            "integrity": "",
+            "ignoreIntegrity": true
+        }
+    ],
+    "properties":{
+        "dimensionFeed":{
+            "type":"string[]",
+            "default":[]
+        },
+        "measureFeed":{
+            "type":"string[]",
+            "default":[]
+        }
+    },
+    "methods":{
+
+    },
+    "dataBindings":{
+        "myDataBindings":{
+            "feeds":[
+                {
+                    "id":"dimensions",
+                    "description":"Dimension",
+                    "type":"dimension"
+                },
+                {
+                    "id":"measures",
+                    "description":"Measure",
+                    "type":"mainStructureMember"
+                }
+            ]
+        }
+    },
+    "events":{
+        "onClick":{
+            "description":"Called When User Click"
+        }
+    }
+}
