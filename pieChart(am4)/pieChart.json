@@ -1,0 +1,93 @@
+{
+    "id": "Pie.sp",
+    "version": "1.1.1",
+    "name": "Custom Pie Chart",
+    "description": " A Pie Chart",
+    "newInstancePrefix": "Pie Chart",
+    "icon": "https://www.iconpacks.net/icons/1/free-pie-chart-icon-683-thumb.png",
+    "vendor": "Shiv",
+    "eula": "",
+    "license": "",
+    "supportsBookmark": true,
+    "supportsLinkedAnalysisFilterOnSelection": true,
+    "supportsExport":true,
+    "webcomponents": [
+        {
+            "kind": "main",
+            "tag": "com-sap-sample-echarts-pie_chart",
+            "url": "http://127.0.0.1:5502/pieChartMain.js",
+            "integrity": "",
+            "ignoreIntegrity": true
+        }
+    ],
+    "properties": {
+        "dimensionFeed":{
+            "type":"string[]",
+            "default":[]
+        },
+        "measureFeed":{
+            "type":"string[]",
+            "default":[]
+        },
+        "width": {
+            "type": "integer"
+        },
+        "height": {
+            "type": "integer"
+        }
+    },
+    "methods": {
+        "getDimensions": {
+            "parameters": [],
+            "body": "return this.dataBindings.getDataBinding('myDataBinding').getDataSource().getDimensions();",
+            "returnType": "DimensionInfo[]"
+          },
+          "getMeasures": {
+            "parameters": [],
+            "body": "return this.dataBindings.getDataBinding('myDataBinding').getDataSource().getMeasures();",
+            "returnType": "MeasureInfo[]"
+          },
+          "addDimension": {
+            "parameters": [
+              {
+                "name": "dimensionId",
+                "type": "string"
+              }
+            ]
+          },
+          "addMeasure": {
+            "parameters": [
+              {
+                "name": "measureId",
+                "type": "string"
+              }
+            ]
+          },
+          "getDataSource": {
+            "parameters": [],
+            "body": "return this.dataBindings.getDataBinding('myDataBinding').getDataSource();",
+            "returnType": "DataSource"
+          }
+    },
+    "events": {
+        "onClick": {
+            "description": "Called when the user clicks the Colored Box."
+        }
+    },
+    "dataBindings": {   
+        "myDataBinding": {
+            "feeds": [
+                {
+                    "id": "dimensions",
+                    "description": "Dimensions",
+                    "type": "dimension"
+                },
+                {
+                    "id": "measures",
+                    "description": "Measures",
+                    "type": "mainStructureMember"
+                }
+            ]
+        }
+    }
+}

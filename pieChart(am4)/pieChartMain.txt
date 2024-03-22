@@ -1,0 +1,149 @@
+var getScriptPromisify = (src) => {
+    return new Promise((resolve) => {
+        $.getScript(src, resolve);
+    });
+};
+
+
+(function () {
+    let template = document.createElement("template");
+    template.innerHTML = `
+    <style> 
+    </style>
+    <div id="root" style="width: 100%; height: 500px;"></div>
+    `;
+    class pie extends HTMLElement {
+        constructor() {
+            super();
+            this._shadowRoot = this.attachShadow({ mode: "open" });
+
+            this._shadowRoot.appendChild(template.content.cloneNode(true));
+
+            this._root = this._shadowRoot.getElementById("root");
+
+            // this.addEventListener("click", event => {
+            //     var event = new Event("onClick");
+            //     this.dispatchEvent(event);
+            // });
+            this._props = {};
+
+            this.selectedSlice= {};
+            this.render();
+
+            
+                  
+        }
+
+        async onCustomWidgetBeforeUpdate(ChangedProperties) {
+            this._props = { ...this._props, ...ChangedProperties };
+            console.log(this._props);
+            this.render(this._props);
+        } 
+        async onCustomWidgetAfterUpdate(ChangedProperties) {
+            
+            // console.log(ChangedProperties);
+        }
+        
+
+        /**
+         * @param {any} dataBindings
+         */
+        set myDataBinding(dataBindings) {
+            this._myDatabinding = dataBindings;
+            
+        }
+        
+
+        async render(props) {
+            await getScriptPromisify("https://cdn.amcharts.com/lib/4/core.js");
+            await getScriptPromisify("https://cdn.amcharts.com/lib/4/charts.js");
+            await getScriptPromisify("https://cdn.amcharts.com/lib/4/themes/animated.js");
+
+            console.log(props);
+            
+            const dimension = this._myDatabinding.metadata.feeds.dimensions.values[0];
+            // console.log(dimension);
+            const measure = this._myDatabinding.metadata.feeds.measures.values[0];
+            const data = this._myDatabinding.data.map((data) => {
+              return {
+                Region: data[dimension].label,
+                Sales: data[measure].raw
+              }
+            }).sort(function(a, b){
+              return a.value - b.value
+            })
+
+            am4core.useTheme(am4themes_animated);
+
+            var chart = am4core.create(this._root, am4charts.PieChart);
+            this.chart = chart;
+
+            this.chart.data = data;
+        
+            var pieSeries = chart.series.push(new am4charts.PieSeries());
+            pieSeries.dataFields.value = "Sales";
+            pieSeries.dataFields.category = "Region";
+            pieSeries.slices.template.stroke = am4core.color("#fff");
+            pieSeries.slices.template.strokeOpacity = 1;
+            // console.log(pieSeries.dataFields.value);
+
+            pieSeries.hiddenState.properties.opacity = 1;
+            pieSeries.hiddenState.properties.endAngle = -90;
+            pieSeries.hiddenState.properties.startAngle = -90;
+
+            chart.hiddenState.properties.radius = am4core.percent(0);
+
+
+
+            pieSeries.slices.template.events.on('hit',(event)=>{
+                var selected = event.target.dataItem.category;
+                // console.log(selected);
+                
+                // var d = this._myDatabinding;
+                // var a = (d["metadata"]["dimensions"]["dimensions_0"]["id"]);
+                // var dimension = {};
+                // dimension[a]=selected;
+                // console.log(dimension);
+                var dimensionId = this._myDatabinding.metadata.dimensions.dimensions_0.id;
+                var filter = {};
+                filter[dimensionId] = selected;
+
+                if (this.selectedSlice[selected]) {
+                    this.selectedSlice[selected] = false;
+                } else {
+                    this.selectedSlice[selected] = true;
+                }
+
+                var filters=[];  
+                Object.keys(this.selectedSlice).forEach(slice=>{
+                    if(this.selectedSlice[slice]){
+                        var sliceFilter={};
+                        sliceFilter[dimensionId] = slice;
+                        filters.push(sliceFilter);
+                        // console.log(filter);
+                    }
+                    if(filters.length==0){
+                        this._props.dataBindings.getDataBinding().getLinkedAnalysis().removeFilters(filters)
+                    }else{
+                        this._props.dataBindings.getDataBinding().getLinkedAnalysis().setFilters(filters)
+                    }
+                   
+                })
+
+                // const linkedAnalysis = props['dataBindings'].getDataBinding('dataBinding').getLinkedAnalysis();
+                // console.log(linkedAnalysis);
+                
+                // if(this.selectedSlice[selected]){
+                //     this.selectedSlice[selected] = false;
+                //     this.dataBindings.getDataBinding().getLinkedAnalysis().removeFilters(dimension);
+                // }else{
+                //     this.selectedSlice[selected] = true;
+                //     this.dataBindings.getDataBinding().getLinkedAnalysis().setFilters(dimension);
+                // }
+            })
+
+        }
+        
+    }
+    customElements.define("com-sap-sample-echarts-pie_chart", pie);
+})();
