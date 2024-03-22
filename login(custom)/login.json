@@ -1,0 +1,88 @@
+{
+    "id": "login.sp.07",
+    "version": "2.3.3",
+    "name": "Login",
+    "description": "Digital-Sweep Login",
+    "newInstancePrefix": "LoginPage",
+    "vendor": "Shiv",
+    "eula": "",
+    "license": "",
+    "supportsExport":true,
+    "icon": "http://127.0.0.1:5500/icons8-nft-user-48.png",
+    "webcomponents": [
+        {
+            "kind": "main",
+            "tag": "login-page-sp",
+            "url": "http://127.0.0.1:5503/login.js  ",
+            "integrity": "",
+            "ignoreIntegrity": true
+        }
+    ],
+    "properties": {
+        "color": {
+            "type": "string",
+            "description": "Background color",
+            "default": "blue"
+        },
+        "opacity": {
+            "type": "number",
+            "description": "Opacity",
+            "default": 1
+        },
+        "width": {
+            "type": "integer",
+            "default": 100
+        },
+        "height": {
+            "type": "integer",
+            "default": 100
+        },
+        "border": {
+            "type": "number"
+        },
+        "username": {
+            "type": "string"
+        },
+        "password": {
+            "type": "string"
+        }
+    },
+    
+    "methods": {
+        "setColor": {
+            "description": "Sets the background color.",
+            "parameters": [
+                {
+                    "name": "newColor",
+                    "type": "string",
+                    "description": "The new background color"
+                }
+            ],
+            "body": "this.color = newColor;"
+        },
+        "getColor": {
+            "returnType": "string",
+            "description": "Returns the background color.",
+            "body": "return this.color;"
+        },
+        "setUsername": {
+            "description": "username",
+            "parameters": [
+                {
+                    "name": "newUsername",
+                    "type": "string"
+                }
+            ]
+        },
+        "getUsername": {
+            "returnType": "boolean",
+            "description": "returns username"
+        }
+    },
+    
+    "events": {
+        "onClick": {
+            "description": "Called when the user clicks the Colored Box."
+        }
+    }
+}
